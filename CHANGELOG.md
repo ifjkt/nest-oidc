@@ -1,4 +1,13 @@
-## [10.0.2](https://github.com/ifjkt/nest-oidc/compare/10.0.1...10.0.2) (2024-01-16)
+## [10.0.3](https://github.com/ifjkt/nest-oidc/compare/v10.0.2...v10.0.3) (2024-01-16)
+
+
+### Features
+
+* forRootAsync ([46d1ae9](https://github.com/ifjkt/nest-oidc/commit/46d1ae9cf4339a251f56a3aeddba89f2ddb0bdc8))
+
+
+
+## [10.0.2](https://github.com/ifjkt/nest-oidc/compare/10.0.1...v10.0.2) (2024-01-16)
 
 
 ### Features
