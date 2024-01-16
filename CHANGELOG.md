@@ -1,61 +1,48 @@
-# [10.0.1](https://github.com/ifjkt/nest-oidc/compare/10.0.0...10.0.1) (2024-01-16)
+## [10.0.2](https://github.com/ifjkt/nest-oidc/compare/10.0.1...10.0.2) (2024-01-16)
 
-### Fixes
 
-- **axios:** fix dependencies ([d1a98c10](https://github.com/ifjkt/nest-oidc/commit/d1a98c10f0b4c045885fa103809c9998d5f1507d))
+### Features
+
+* permissions feature ([2e1b395](https://github.com/ifjkt/nest-oidc/commit/2e1b395751ebf1320cb3a3a209694edae6e2be8a))
+
+
+
+## [10.0.1](https://github.com/ifjkt/nest-oidc/compare/10.0.0...10.0.1) (2024-01-16)
+
+
+### Bug Fixes
+
+* axios dependencies ([d1a98c1](https://github.com/ifjkt/nest-oidc/commit/d1a98c10f0b4c045885fa103809c9998d5f1507d))
+
+
 
 # [10.0.0](https://github.com/ifjkt/nest-oidc/compare/2.0.0...10.0.0) (2024-01-16)
 
-### Features
-
-- **nestjs:** upgrade library for compatibility with nestjs 10 ([500c14c8](https://github.com/ifjkt/nest-oidc/commit/500c14c819ef7448766abd28f31ad5b0e9db0a63))
-
-# [2.0.0-rc.0](https://github.com/5-stones/nest-oidc/compare/v1.5.0...v2.0.0-rc.0) (2023-01-11)
 
 ### Features
 
-- **nestjs:** upgrade library for compatibility with nestjs 9 ([31936d0](https://github.com/5-stones/nest-oidc/commit/31936d0a5cef3054b0f996116213490bf9d16879))
+* bump nest version to 10.x ([500c14c](https://github.com/ifjkt/nest-oidc/commit/500c14c819ef7448766abd28f31ad5b0e9db0a63))
 
-# [1.5.0](https://github.com/5-stones/nest-oidc/compare/v1.4.0...v1.5.0) (2023-01-05)
 
-# [1.4.0](https://github.com/5-stones/nest-oidc/compare/v1.3.0...v1.4.0) (2023-01-05)
 
-# [1.3.0](https://github.com/5-stones/nest-oidc/compare/v1.2.2...v1.3.0) (2022-08-02)
+# [2.0.0](https://github.com/ifjkt/nest-oidc/compare/b749f68d48291c236961be5ff0eb36d61b5a081e...2.0.0) (2023-01-11)
 
-### Features
-
-- **guards, decorators:** add the ability to specify an optional authentication guard ([4e4dcc5](https://github.com/5-stones/nest-oidc/commit/4e4dcc586c4209570596e67506351c0fdc07ccc5))
-
-## [1.2.2](https://github.com/5-stones/nest-oidc/compare/v1.2.1...v1.2.2) (2022-02-08)
-
-## [1.2.1](https://github.com/5-stones/nest-oidc/compare/v1.2.0...v1.2.1) (2022-02-04)
 
 ### Bug Fixes
 
-- **package.json:** update peer dependencies ([cffae2d](https://github.com/5-stones/nest-oidc/commit/cffae2d9eb202b8e5598de487c62fdaa1f5dee6c))
+* **package.json:** update peer dependencies ([cffae2d](https://github.com/ifjkt/nest-oidc/commit/cffae2d9eb202b8e5598de487c62fdaa1f5dee6c))
+* **roles:** fix roles disabling logic ([55e7605](https://github.com/ifjkt/nest-oidc/commit/55e76054cc3e11c8a8d14e82cfd6f442d655ac3f))
 
-# [1.2.0](https://github.com/5-stones/nest-oidc/compare/v1.1.1...v1.2.0) (2022-01-31)
-
-### Features
-
-- support rest decorators; make graphql optional ([ae1479b](https://github.com/5-stones/nest-oidc/commit/ae1479b643f14a1f115e56d21aa9c8fa40656d02))
-
-## [1.1.1](https://github.com/5-stones/nest-oidc/compare/v1.1.0...v1.1.1) (2022-01-26)
-
-### Bug Fixes
-
-- **roles:** fix roles disabling logic ([55e7605](https://github.com/5-stones/nest-oidc/commit/55e76054cc3e11c8a8d14e82cfd6f442d655ac3f))
-
-# [1.1.0](https://github.com/5-stones/nest-oidc/compare/v1.0.0...v1.1.0) (2022-01-26)
 
 ### Features
 
-- **roles:** allow for the disabling of role validation by passing no roles ([37d9ac5](https://github.com/5-stones/nest-oidc/commit/37d9ac5265a1e5eb2c6a9fecc5c0658d1a21a6db))
+* ***/*:** add basic OIDC JWT validation and utilities ([b749f68](https://github.com/ifjkt/nest-oidc/commit/b749f68d48291c236961be5ff0eb36d61b5a081e))
+* ***/*:** added JWT mapper and abstracted role functionality ([2b015d5](https://github.com/ifjkt/nest-oidc/commit/2b015d5ccb5b64367d6c5e0c8f23496f56dc7a2c))
+* **access-levels:** abstract access level evaluation for greater flexibility ([9b28811](https://github.com/ifjkt/nest-oidc/commit/9b28811120a4bfa5fb2b952baf2ebdee4b1de299))
+* **guards, decorators:** add the ability to specify an optional authentication guard ([4e4dcc5](https://github.com/ifjkt/nest-oidc/commit/4e4dcc586c4209570596e67506351c0fdc07ccc5))
+* **nestjs:** upgrade library for compatibility with nestjs 9 ([31936d0](https://github.com/ifjkt/nest-oidc/commit/31936d0a5cef3054b0f996116213490bf9d16879))
+* **roles:** allow for the disabling of role validation by passing no roles ([37d9ac5](https://github.com/ifjkt/nest-oidc/commit/37d9ac5265a1e5eb2c6a9fecc5c0658d1a21a6db))
+* support rest decorators; make graphql optional ([ae1479b](https://github.com/ifjkt/nest-oidc/commit/ae1479b643f14a1f115e56d21aa9c8fa40656d02))
 
-# [1.0.0](https://github.com/5-stones/nest-oidc/compare/b749f68d48291c236961be5ff0eb36d61b5a081e...v1.0.0) (2021-06-03)
 
-### Features
 
-- **_/_:** add basic OIDC JWT validation and utilities ([b749f68](https://github.com/5-stones/nest-oidc/commit/b749f68d48291c236961be5ff0eb36d61b5a081e))
-- **_/_:** added JWT mapper and abstracted role functionality ([2b015d5](https://github.com/5-stones/nest-oidc/commit/2b015d5ccb5b64367d6c5e0c8f23496f56dc7a2c))
-- **access-levels:** abstract access level evaluation for greater flexibility ([9b28811](https://github.com/5-stones/nest-oidc/commit/9b28811120a4bfa5fb2b952baf2ebdee4b1de299))

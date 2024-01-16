@@ -1,6 +1,6 @@
 {
   "name": "@ifjkt/nest-oidc",
-  "version": "10.0.1",
+  "version": "10.0.2",
   "description": "An OIDC authentication module for NestJS APIs",
   "homepage": "https://github.com/ifjkt/nest-oidc#readme",
   "author": "Tamas Kiss <ifjkisstamas@outlook.com>",
@@ -93,7 +93,9 @@
     "typescript": "^5.1.6"
   },
   "jest": {
-    "setupFiles": ["dotenv/config"],
+    "setupFiles": [
+      "dotenv/config"
+    ],
     "moduleFileExtensions": [
       "js",
       "json",
