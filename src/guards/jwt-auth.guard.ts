@@ -1,8 +1,7 @@
 import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
-
-import { IS_AUTHENTICATION_OPTIONAL_TOKEN, ROLES_TOKEN } from 'src/decorators';
+import { IS_AUTHENTICATION_OPTIONAL_TOKEN, PERMISSIONS_TOKEN, ROLES_TOKEN } from '../decorators';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -26,8 +25,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       }
     }
 
+    const permissions = this.reflector.get<string[]>(PERMISSIONS_TOKEN, context.getHandler());
+    if (!permissions) {
+      return true;
+    }
+
     const roles = this.reflector.get<string[]>(ROLES_TOKEN, context.getHandler());
-    if (!roles) {
+    if (!roles && !permissions) {
       return true;
     }
 
@@ -37,7 +41,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (!user) {
       return true;
     } else {
-      return user && user.roles && user.roles.some((role: string) => roles.includes(role));
+      if (!permissions) {
+        return user && user.roles && user.roles.some((role: string) => roles.includes(role));
+      } else {
+        return user.permissions && user.permissions.some((permission: string) => permissions.includes(permission));
+      }
     }
   }
 }

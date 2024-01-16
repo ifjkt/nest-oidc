@@ -5,7 +5,7 @@ import * as jsonwebtoken from 'jsonwebtoken';
 import { JwksClient } from 'jwks-rsa';
 import * as jexl from 'jexl';
 
-import { JWT_MAPPER, OIDC_AUTHORITY, ROLE_EVALUATORS } from '../consts';
+import { JWT_MAPPER, OIDC_AUTHORITY, PERMISSIONS, ROLE_EVALUATORS } from '../consts';
 import { RoleEvaluator } from '../interfaces';
 
 const length = (elem: any) => (elem ? elem.length : 0);
@@ -33,12 +33,10 @@ export class AuthService {
   private readonly jwksClient: Promise<JwksClient>;
 
   constructor(
-    @Inject(ROLE_EVALUATORS)
-    protected readonly evaluators: RoleEvaluator[],
-    @Inject(OIDC_AUTHORITY)
-    protected readonly oidcAuthority: string,
-    @Inject(JWT_MAPPER)
-    protected readonly jwtMapper: (payload: any) => any,
+    @Inject(ROLE_EVALUATORS) protected readonly evaluators: RoleEvaluator[],
+    @Inject(OIDC_AUTHORITY) protected readonly oidcAuthority: string,
+    @Inject(JWT_MAPPER) protected readonly jwtMapper: (payload: any) => any,
+    @Inject(PERMISSIONS) protected readonly permissions: (payload: any) => string[],
     protected readonly httpService: HttpService,
   ) {
     this.jwksClient = this.getJwksClient();
@@ -111,6 +109,8 @@ export class AuthService {
 
       user.roles = roles;
     }
+
+    user.permissions = this.permissions ? this.permissions(payload) : [];
 
     return user;
   }
