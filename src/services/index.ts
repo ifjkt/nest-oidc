@@ -1,1 +1,1 @@
-export { AuthService } from './auth.service';
+export { AuthService, JwksKey } from './auth.service';

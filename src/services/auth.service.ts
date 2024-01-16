@@ -8,15 +8,15 @@ import * as jexl from 'jexl';
 import { JWT_MAPPER, OIDC_AUTHORITY, ROLE_EVALUATORS } from '../consts';
 import { RoleEvaluator } from '../interfaces';
 
-const length = (elem: any) => elem ? elem.length : 0;
-const mapValue = (obj: any) => obj ? obj.map(value => ({ value })) : [];
+const length = (elem: any) => (elem ? elem.length : 0);
+const mapValue = (obj: any) => (obj ? obj.map((value) => ({ value })) : []);
 jexl.addTransform('length', length);
 jexl.addTransform('mapValue', mapValue);
 
-type SecretOrKeyProviderCallback = (error, secret: false|string) => void;
+type SecretOrKeyProviderCallback = (error, secret: false | string) => void;
 type SecretOrKeyProvider = (request, rawJwtToken, done: SecretOrKeyProviderCallback) => void;
 
-interface JwksKey {
+export interface JwksKey {
   kid: string;
   kty: string;
   alg: string;
@@ -30,7 +30,7 @@ interface JwksKey {
 @Injectable()
 export class AuthService {
   private _oidcConfig: any | null = null;
-  private jwksClient: Promise<JwksClient>;
+  private readonly jwksClient: Promise<JwksClient>;
 
   constructor(
     @Inject(ROLE_EVALUATORS)
@@ -55,14 +55,12 @@ export class AuthService {
     if (this._oidcConfig) return this._oidcConfig;
 
     try {
-      const source$ = this.httpService
-        .get(`${this.oidcAuthority}/.well-known/openid-configuration`)
-      ;
+      const source$ = this.httpService.get(`${this.oidcAuthority}/.well-known/openid-configuration`);
       const response = await lastValueFrom(source$);
       this._oidcConfig = response.data;
       return this._oidcConfig;
     } catch (err) {
-      throw new BadRequestException("There was an error when attempting to fetch openid-configuration", { cause: err });
+      throw new BadRequestException('There was an error when attempting to fetch openid-configuration', { cause: err });
     }
   }
 
@@ -71,7 +69,7 @@ export class AuthService {
 
     if (result && typeof result !== 'string' && result.header) {
       const { header } = result;
-      const kid =  header.kid;
+      const kid = header.kid;
       const client = await this.jwksClient;
       const key = await client.getSigningKey(kid);
       return key.getPublicKey();
@@ -86,10 +84,9 @@ export class AuthService {
         .then((key: string) => {
           done(null, key);
         })
-        .catch(error => {
+        .catch((error) => {
           done(error, false);
-        })
-      ;
+        });
     };
   }
 

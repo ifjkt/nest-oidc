@@ -1,5 +1,8 @@
 # NestJS OIDC
 
+![npm](https://img.shields.io/npm/v/@ifjkt/nest-oidc.svg)
+![NPM](https://img.shields.io/npm/l/@ifjkt/nest-oidc.svg)
+
 A configurable OIDC library for NestJS and GraphQL or REST.
 
 - [Install](#install)
@@ -23,7 +26,7 @@ A configurable OIDC library for NestJS and GraphQL or REST.
 Install `nest-oidc`:
 
 ```sh
-npm i @5stones/nest-oidc
+npm i @ifjkt/nest-oidc
 ```
 
 Install it's peer dependencies:
@@ -48,8 +51,7 @@ import { AuthModule } from '@5stones/nest-oidc';
 
 @Module({
   imports: [
-    ...
-    AuthModule.forRoot({
+    ...AuthModule.forRoot({
       oidcAuthority: 'http://iam.app.com/auth/realms/app',
     }),
   ],
@@ -172,9 +174,7 @@ export class CatsController {
 }
 ```
 
-
 #### GraphQL User
-
 
 ```ts
 import { UseGuards } from '@nestjs/common';
@@ -274,8 +274,7 @@ import { AuthModule } from '@5stones/nest-oidc';
 
 @Module({
   imports: [
-    ...
-    AuthModule.forRoot({
+    ...AuthModule.forRoot({
       oidcAuthority: 'http://iam.app.com/auth/realms/app',
       roleEvaluators: [
         {
@@ -349,7 +348,6 @@ done by the Guards you'll need to map the token into a header on a request objec
 and then ensure that you're always returning a request to be processed by the
 `JwtStrategy`. See the example below:
 
-
 ```ts
 // app.module.ts
 ...
@@ -409,6 +407,7 @@ all, then no user will be populated on the request.
 ## Release
 
 The standard release command for this project is:
+
 ```
 npm version [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease | from-git]
 ```
@@ -418,7 +417,6 @@ This command will:
 1. Generate/update the Changelog
 1. Bump the package version
 1. Tag & pushing the commit
-
 
 e.g.
 

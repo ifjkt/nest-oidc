@@ -18,10 +18,7 @@ export class AuthModule {
   static forRoot(options: AuthModuleRegistrationOptions): DynamicModule {
     return {
       module: AuthModule,
-      imports: [
-        HttpModule,
-        PassportModule.register({ defaultStrategy: 'jwt' }),
-      ],
+      imports: [HttpModule, PassportModule.register({ defaultStrategy: 'jwt' })],
       providers: [
         AuthService,
         JwtStrategy,

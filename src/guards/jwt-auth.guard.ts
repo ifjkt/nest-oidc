@@ -18,10 +18,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const isAuthOptional = this.reflector.get<boolean>(IS_AUTHENTICATION_OPTIONAL_TOKEN, context.getHandler());
 
     try {
-      await super.canActivate(context)
+      await super.canActivate(context);
     } catch (err) {
       const isUnauthorized = err instanceof UnauthorizedException;
-      if (!isUnauthorized || isUnauthorized && !isAuthOptional) {
+      if (!isUnauthorized || (isUnauthorized && !isAuthOptional)) {
         throw err;
       }
     }
@@ -37,11 +37,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (!user) {
       return true;
     } else {
-      return (
-        user &&
-        user.roles &&
-        user.roles.some((role: string) => roles.includes(role))
-      );
+      return user && user.roles && user.roles.some((role: string) => roles.includes(role));
     }
   }
 }
