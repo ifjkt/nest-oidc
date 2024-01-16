@@ -1,4 +1,10 @@
-# [10.0.0](https://github.com/ifjkt/nest-oidc/compare/2.0.0...10.0.0) (2023-01-11)
+# [10.0.1](https://github.com/ifjkt/nest-oidc/compare/10.0.0...10.0.1) (2024-01-16)
+
+### Fixes
+
+- **axios:** fix dependencies ([d1a98c10](https://github.com/ifjkt/nest-oidc/commit/d1a98c10f0b4c045885fa103809c9998d5f1507d))
+
+# [10.0.0](https://github.com/ifjkt/nest-oidc/compare/2.0.0...10.0.0) (2024-01-16)
 
 ### Features
 
