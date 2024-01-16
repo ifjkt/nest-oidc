@@ -1,45 +1,39 @@
-import { Module, DynamicModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { ConfigurableModuleClass, MODULE_OPTIONS_TOKEN } from './auth.module-definition';
 import { HttpModule } from '@nestjs/axios';
 import { PassportModule } from '@nestjs/passport';
-
-import { JWT_MAPPER, OIDC_AUTHORITY, PERMISSIONS, ROLE_EVALUATORS } from './consts';
-import { RoleEvaluator } from './interfaces';
 import { AuthService } from './services';
 import { JwtStrategy } from './strategies';
+import { JWT_MAPPER, OIDC_AUTHORITY, PERMISSIONS, ROLE_EVALUATORS } from './consts';
+import { AuthModuleRegistrationOptions } from './auth.options';
 
-export interface AuthModuleRegistrationOptions {
-  oidcAuthority: string;
-  roleEvaluators?: RoleEvaluator[];
-  jwtMapper?: (payload: any) => any;
-  permissions?: (payload: any) => string[];
-}
+/**/
 
-@Module({})
-export class AuthModule {
-  static forRoot(options: AuthModuleRegistrationOptions): DynamicModule {
-    return {
-      module: AuthModule,
-      imports: [HttpModule, PassportModule.register({ defaultStrategy: 'jwt' })],
-      providers: [
-        AuthService,
-        JwtStrategy,
-        {
-          provide: OIDC_AUTHORITY,
-          useValue: options.oidcAuthority,
-        },
-        {
-          provide: ROLE_EVALUATORS,
-          useValue: options.roleEvaluators || [],
-        },
-        {
-          provide: JWT_MAPPER,
-          useValue: options.jwtMapper ? options.jwtMapper : (payload: any) => payload,
-        },
-        {
-          provide: PERMISSIONS,
-          useValue: options.permissions ? options.permissions : (payload: any) => [],
-        },
-      ],
-    };
-  }
-}
+@Module({
+  imports: [HttpModule, PassportModule.register({ defaultStrategy: 'jwt' })],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    {
+      provide: OIDC_AUTHORITY,
+      inject: [MODULE_OPTIONS_TOKEN],
+      useFactory: (options: AuthModuleRegistrationOptions) => options.oidcAuthority,
+    },
+    {
+      provide: ROLE_EVALUATORS,
+      inject: [MODULE_OPTIONS_TOKEN],
+      useFactory: (options: AuthModuleRegistrationOptions) => options.roleEvaluators,
+    },
+    {
+      provide: JWT_MAPPER,
+      inject: [MODULE_OPTIONS_TOKEN],
+      useFactory: (options: AuthModuleRegistrationOptions) => options.jwtMapper,
+    },
+    {
+      provide: PERMISSIONS,
+      inject: [MODULE_OPTIONS_TOKEN],
+      useFactory: (options: AuthModuleRegistrationOptions) => options.permissions,
+    },
+  ],
+})
+export class AuthModule extends ConfigurableModuleClass {}

@@ -14,6 +14,8 @@ describe('AppController (e2e)', () => {
         ConfigModule.forRoot(),
         AuthModule.forRoot({
           oidcAuthority: `${process.env.OIDC_AUTHORITY_URL}/realms/${process.env.OIDC_AUTHORITY_REALM}`,
+          roleEvaluators: [],
+          jwtMapper: (payload: any) => payload,
           permissions: (payload: any) => {
             return ['PERMISSION_SECURE_ACCESS'];
           },

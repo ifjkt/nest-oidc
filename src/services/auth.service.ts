@@ -33,10 +33,10 @@ export class AuthService {
   private readonly jwksClient: Promise<JwksClient>;
 
   constructor(
-    @Inject(ROLE_EVALUATORS) protected readonly evaluators: RoleEvaluator[],
-    @Inject(OIDC_AUTHORITY) protected readonly oidcAuthority: string,
-    @Inject(JWT_MAPPER) protected readonly jwtMapper: (payload: any) => any,
-    @Inject(PERMISSIONS) protected readonly permissions: (payload: any) => string[],
+    @Inject(ROLE_EVALUATORS) protected readonly evaluators: RoleEvaluator[] | Promise<RoleEvaluator[]>,
+    @Inject(OIDC_AUTHORITY) protected readonly oidcAuthority: string | Promise<string>,
+    @Inject(JWT_MAPPER) protected readonly jwtMapper: (payload: any) => any | Promise<any>,
+    @Inject(PERMISSIONS) protected readonly permissions: (payload: any) => string[] | Promise<string[]>,
     protected readonly httpService: HttpService,
   ) {
     this.jwksClient = this.getJwksClient();
@@ -53,7 +53,8 @@ export class AuthService {
     if (this._oidcConfig) return this._oidcConfig;
 
     try {
-      const source$ = this.httpService.get(`${this.oidcAuthority}/.well-known/openid-configuration`);
+      const oidcAuthority = await this.oidcAuthority;
+      const source$ = this.httpService.get(`${oidcAuthority}/.well-known/openid-configuration`);
       const response = await lastValueFrom(source$);
       this._oidcConfig = response.data;
       return this._oidcConfig;
@@ -89,12 +90,14 @@ export class AuthService {
   }
 
   async validate(payload: any): Promise<any> {
-    const user: any = this.jwtMapper(payload);
+    const user: any = await this.jwtMapper(payload);
 
-    if (this.evaluators?.length) {
+    const evaluators = await this.evaluators;
+
+    if (evaluators?.length) {
       const roles: string[] = [];
 
-      for (const evaluator of this.evaluators) {
+      for (const evaluator of evaluators) {
         try {
           let hasRole = await jexl.eval(evaluator.expression, { jwt: payload });
           hasRole = !!hasRole; // explicitly cast to boolean
@@ -110,7 +113,9 @@ export class AuthService {
       user.roles = roles;
     }
 
-    user.permissions = this.permissions ? this.permissions(payload) : [];
+    if (this.permissions) {
+      user.permissions = await this.permissions(payload);
+    }
 
     return user;
   }
