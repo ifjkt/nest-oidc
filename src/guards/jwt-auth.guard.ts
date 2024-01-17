@@ -36,16 +36,24 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     }
 
     const request = this.getRequest(context);
+
     const user = request.user;
 
     if (!user) {
       return true;
-    } else {
-      if (!permissions) {
-        return user && user.roles && user.roles.some((role: string) => roles.includes(role));
-      } else {
-        return user.permissions && user.permissions.some((permission: string) => permissions.includes(permission));
-      }
     }
+
+    let hasRoleAuthority = true;
+    if (roles && roles.length > 0) {
+      hasRoleAuthority = user && user.roles && user.roles.some((role: string) => roles.includes(role));
+    }
+
+    let hasPermissionAuthority = true;
+    if (permissions && permissions.length > 0) {
+      hasPermissionAuthority =
+        user && user.permissions && user.permissions.some((permission: string) => permissions.includes(permission));
+    }
+
+    return hasRoleAuthority && hasPermissionAuthority;
   }
 }
