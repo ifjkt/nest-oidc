@@ -1,1 +1,0 @@
-export const ROLE_EVALUATORS = 'ROLE_EVALUATORS';

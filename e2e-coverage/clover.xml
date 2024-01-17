@@ -32,7 +32,7 @@
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
       </file>
-      <file name="ROLE_EVALUATORS.ts" path="/developer/ifjkt/nest-oidc/src/consts/ROLE_EVALUATORS.ts">
+      <file name="ROLES.ts" path="/developer/ifjkt/nest-oidc/src/consts/ROLES.ts">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
       </file>

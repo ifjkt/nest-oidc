@@ -15,41 +15,41 @@
         }
     </style>
 </head>
-    
+
 <body>
 <div class='wrapper'>
     <div class='pad1'>
         <h1><a href="../../index.html">All files</a> / <a href="index.html">src/services</a> auth.service.ts</h1>
         <div class='clearfix'>
-            
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">59.32% </span>
                 <span class="quiet">Statements</span>
                 <span class='fraction'>35/59</span>
             </div>
-        
-            
+
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">30.76% </span>
                 <span class="quiet">Branches</span>
                 <span class='fraction'>4/13</span>
             </div>
-        
-            
+
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">58.33% </span>
                 <span class="quiet">Functions</span>
                 <span class='fraction'>7/12</span>
             </div>
-        
-            
+
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">62.26% </span>
                 <span class="quiet">Lines</span>
                 <span class='fraction'>33/53</span>
             </div>
-        
-            
+
+
         </div>
         <p class="quiet">
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
@@ -304,7 +304,7 @@ import * as jsonwebtoken from 'jsonwebtoken';
 import { JwksClient } from 'jwks-rsa';
 import * as jexl from 'jexl';
 &nbsp;
-import { JWT_MAPPER, OIDC_AUTHORITY, PERMISSIONS, ROLE_EVALUATORS } from '../consts';
+import { JWT_MAPPER, OIDC_AUTHORITY, PERMISSIONS, ROLES } from '../consts';
 import { RoleEvaluator } from '../interfaces';
 &nbsp;
 const length = <span class="fstat-no" title="function not covered" >(e</span>lem: any) =&gt; (<span class="cstat-no" title="statement not covered" >elem ? elem.length : 0)</span>;
@@ -332,7 +332,7 @@ export class AuthService {
   private readonly jwksClient: Promise&lt;JwksClient&gt;;
 &nbsp;
   constructor(
-    @Inject(ROLE_EVALUATORS) protected readonly evaluators: RoleEvaluator[],
+    @Inject(ROLES) protected readonly evaluators: RoleEvaluator[],
     @Inject(OIDC_AUTHORITY) protected readonly oidcAuthority: string,
     @Inject(JWT_MAPPER) protected readonly jwtMapper: (payload: any) =&gt; any,
     @Inject(PERMISSIONS) protected readonly permissions: (payload: any) =&gt; string[],
@@ -433,4 +433,3 @@ export class AuthService {
         <script src="../../block-navigation.js"></script>
     </body>
 </html>
-    

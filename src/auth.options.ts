@@ -1,9 +1,8 @@
-import { RoleEvaluator } from './interfaces';
-import { Provider, Type } from '@nestjs/common';
+import { Provider } from '@nestjs/common';
 
 export interface AuthModuleRegistrationOptions {
   oidcAuthority: string | Promise<string>;
-  roleEvaluators?: RoleEvaluator[] | Promise<RoleEvaluator[]>;
+  roles?: (payload: any) => string[] | Promise<string[]>;
   jwtMapper?: (payload: any) => any | Promise<any>;
   permissions?: (payload: any) => string[] | Promise<string[]>;
 }

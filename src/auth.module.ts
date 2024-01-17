@@ -4,7 +4,7 @@ import { HttpModule } from '@nestjs/axios';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './services';
 import { JwtStrategy } from './strategies';
-import { JWT_MAPPER, OIDC_AUTHORITY, PERMISSIONS, ROLE_EVALUATORS } from './consts';
+import { JWT_MAPPER, OIDC_AUTHORITY, PERMISSIONS, ROLES } from './consts';
 import { AuthModuleRegistrationOptions } from './auth.options';
 
 /**/
@@ -20,9 +20,9 @@ import { AuthModuleRegistrationOptions } from './auth.options';
       useFactory: (options: AuthModuleRegistrationOptions) => options.oidcAuthority,
     },
     {
-      provide: ROLE_EVALUATORS,
+      provide: ROLES,
       inject: [MODULE_OPTIONS_TOKEN],
-      useFactory: (options: AuthModuleRegistrationOptions) => options.roleEvaluators,
+      useFactory: (options: AuthModuleRegistrationOptions) => options.roles,
     },
     {
       provide: JWT_MAPPER,

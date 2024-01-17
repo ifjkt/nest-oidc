@@ -4,25 +4,20 @@ import * as request from 'supertest';
 import { AuthModule } from '../auth.module';
 import { TestController } from './controllers/test.controller';
 import { ConfigModule } from '@nestjs/config';
-import { TestService } from './service/test.service';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   beforeEach(async () => {
     jest.resetModules();
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      providers: [TestService],
       imports: [
         ConfigModule.forRoot(),
         AuthModule.forRootAsync({
-          inject: [TestService],
-          useFactory: async (testService: TestService) => ({
+          useFactory: async () => ({
             oidcAuthority: `${process.env.OIDC_AUTHORITY_URL}/realms/${process.env.OIDC_AUTHORITY_REALM}`,
-            roleEvaluators: [],
             jwtMapper: (payload: any) => payload,
-            permissions: async (payload: any) => {
-              return await testService.getPermissions();
-            },
+            roles: () => ['ROLE_TESTER'],
+            permissions: () => ['PERMISSION_SECURE_ACCESS'],
           }),
         }),
       ],

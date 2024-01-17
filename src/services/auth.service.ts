@@ -1,17 +1,10 @@
-import { Injectable, Inject, BadRequestException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import * as jsonwebtoken from 'jsonwebtoken';
 import { JwksClient } from 'jwks-rsa';
-import * as jexl from 'jexl';
 
-import { JWT_MAPPER, OIDC_AUTHORITY, PERMISSIONS, ROLE_EVALUATORS } from '../consts';
-import { RoleEvaluator } from '../interfaces';
-
-const length = (elem: any) => (elem ? elem.length : 0);
-const mapValue = (obj: any) => (obj ? obj.map((value) => ({ value })) : []);
-jexl.addTransform('length', length);
-jexl.addTransform('mapValue', mapValue);
+import { JWT_MAPPER, OIDC_AUTHORITY, PERMISSIONS, ROLES } from '../consts';
 
 type SecretOrKeyProviderCallback = (error, secret: false | string) => void;
 type SecretOrKeyProvider = (request, rawJwtToken, done: SecretOrKeyProviderCallback) => void;
@@ -33,7 +26,7 @@ export class AuthService {
   private readonly jwksClient: Promise<JwksClient>;
 
   constructor(
-    @Inject(ROLE_EVALUATORS) protected readonly evaluators: RoleEvaluator[] | Promise<RoleEvaluator[]>,
+    @Inject(ROLES) protected readonly roles: (payload: any) => string[] | Promise<string[]>,
     @Inject(OIDC_AUTHORITY) protected readonly oidcAuthority: string | Promise<string>,
     @Inject(JWT_MAPPER) protected readonly jwtMapper: (payload: any) => any | Promise<any>,
     @Inject(PERMISSIONS) protected readonly permissions: (payload: any) => string[] | Promise<string[]>,
@@ -92,25 +85,8 @@ export class AuthService {
   async validate(payload: any): Promise<any> {
     const user: any = await this.jwtMapper(payload);
 
-    const evaluators = await this.evaluators;
-
-    if (evaluators?.length) {
-      const roles: string[] = [];
-
-      for (const evaluator of evaluators) {
-        try {
-          let hasRole = await jexl.eval(evaluator.expression, { jwt: payload });
-          hasRole = !!hasRole; // explicitly cast to boolean
-
-          if (hasRole) {
-            roles.push(evaluator.role);
-          }
-        } catch (err) {
-          throw new Error(`Error evaluating JWT role '${evaluator.role}'.`);
-        }
-      }
-
-      user.roles = roles;
+    if (this.roles) {
+      user.roles = await this.roles(payload);
     }
 
     if (this.permissions) {
