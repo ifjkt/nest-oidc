@@ -24,23 +24,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         throw err;
       }
     }
-
     const permissions = this.reflector.get<string[]>(PERMISSIONS_TOKEN, context.getHandler());
-    if (!permissions) {
-      return true;
-    }
-
     const roles = this.reflector.get<string[]>(ROLES_TOKEN, context.getHandler());
-    if (!roles && !permissions) {
+    if ((!roles || roles.length === 0) && (!permissions || permissions.length === 0)) {
       return true;
     }
 
     const request = this.getRequest(context);
-
     const user = request.user;
 
     if (!user) {
-      return true;
+      throw new UnauthorizedException('Unable to get the user from context');
     }
 
     let hasRoleAuthority = true;
