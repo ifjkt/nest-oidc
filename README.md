@@ -239,67 +239,12 @@ decorator (i.e. `@Roles()`) it is the same as not adding the decorator at all.
 That is to say, any scenario above the `findAll` and the `findOne` queries
 behave identically.
 
-## Role Evaluators
+## Roles
 
-If your JWT doesn't natively have a `.roles` property of strings on it, you can
-use evaluators to map properties of the JWT to a role. You can do so by
-configuring `roleEvaluators`. `roleEvaluators` are an array of
-`RoleEvaluator` objects which consist of an `expression`, and the access `role`
-that that particular expression grants upon evaluating to `true`.
+You can define your own set of roles based on either the JWT payload and or other logic.
+You can also use forRootAsync() to inject services to determine the role of the user.
 
-An `expression` can be any valid [`jexl`](https://www.npmjs.com/package/jexl)
-expression.
-
-#### Example
-
-Suppose you have a JWT with the following structure:
-
-```ts
-{
-  roles: [
-     { name: "SUPER_USER", id: 1 },
-     ...
-     { name: "PREMIUM", id: 2 },
-  ],
-}
-```
-
-You could then configure an evaluator like the following, which would map a
-user that has a `role` of with the name of `SUPER_USER` to the `ADMIN`
-role in your application.
-
-```ts
-import { Module } from '@nestjs/common';
-import { AuthModule } from '@5stones/nest-oidc';
-
-@Module({
-  imports: [
-    ...AuthModule.forRoot({
-      oidcAuthority: 'http://iam.app.com/auth/realms/app',
-      roleEvaluators: [
-        {
-          expression: 'jwt.roles[.name == "SUPER_USER"]|length > 0',
-          role: 'ADMIN',
-        },
-      ],
-    }),
-  ],
-})
-export class AppModule {}
-```
-
-The user object within your application will now have the following:
-
-```ts
-{
-  ...
-  roles: [
-    "ADMIN",
-  ],
-}
-```
-
-Then you would simply decorate your endpoint with the `@Roles('ADMIN')`
+You can simply decorate your endpoint with the `@Roles('ADMIN')`
 annotation in order to lock it down to users of that role.
 
 ## JWT Mapper
