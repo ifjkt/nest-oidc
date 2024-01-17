@@ -1,3 +1,19 @@
+# [10.1.0](https://github.com/ifjkt/nest-oidc/compare/v10.0.3...v10.1.0) (2024-01-17)
+
+
+### Bug Fixes
+
+* **auth-guard:** role and permission evaluation ([943ea16](https://github.com/ifjkt/nest-oidc/commit/943ea16f14fe9c990f7cb894c2b2f8fed2ccd8e4))
+* **auth-guard:** throw exception on invalid user body from JWT ([9db6cff](https://github.com/ifjkt/nest-oidc/commit/9db6cff5481b14b86a3d3d6a4f37818eb7857056))
+
+
+### Features
+
+* change role evaluators to roles ([ab4a2d2](https://github.com/ifjkt/nest-oidc/commit/ab4a2d24f4574cb9fec1ecd6b0a0a792340b66f9))
+* remove jexl ([ddbfaef](https://github.com/ifjkt/nest-oidc/commit/ddbfaef8eaf5a4cf6bce1905071f9ecd31268f8f))
+
+
+
 ## [10.0.3](https://github.com/ifjkt/nest-oidc/compare/v10.0.2...v10.0.3) (2024-01-16)
 
 
