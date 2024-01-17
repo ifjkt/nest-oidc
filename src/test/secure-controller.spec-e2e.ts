@@ -15,7 +15,7 @@ describe('AppController (e2e)', () => {
         AuthModule.forRoot({
           oidcAuthority: `${process.env.OIDC_AUTHORITY_URL}/realms/${process.env.OIDC_AUTHORITY_REALM}`,
           roles: () => ['ROLE_TESTER'],
-          permissions: () => ['PERMISSION_SECURE_ACCESS'],
+          permissions: () => ['PERMISSION_A', 'PERMISSION_B', 'PERMISSION_C'],
           jwtMapper: (payload: any) => payload,
         }),
       ],
@@ -42,7 +42,7 @@ describe('AppController (e2e)', () => {
       .expect("I'm a secure endpoint!");
   });
 
-  it('/secure (GET) with permissions', () => {
+  it('/secure/permission (GET) with permissions', () => {
     return request(app.getHttpServer())
       .get('/secure/permission')
       .set('Authorization', `Bearer ${process.env.VALID_ACCESS_TOKEN}`)
@@ -50,11 +50,54 @@ describe('AppController (e2e)', () => {
       .expect("I'm a secure endpoint via permissions!");
   });
 
-  it('/secure (GET) with roles', () => {
+  it('/secure/permission-other (GET) with insufficient permissions', () => {
+    return request(app.getHttpServer())
+      .get('/secure/permission-other')
+      .set('Authorization', `Bearer ${process.env.VALID_ACCESS_TOKEN}`)
+      .expect(403);
+  });
+
+  it('/secure/role (GET) with roles', () => {
     return request(app.getHttpServer())
       .get('/secure/role')
       .set('Authorization', `Bearer ${process.env.VALID_ACCESS_TOKEN}`)
       .expect(200)
       .expect("I'm a secure endpoint via roles!");
+  });
+
+  it('/secure/role-other (GET) with insufficient roles', () => {
+    return request(app.getHttpServer())
+      .get('/secure/role-other')
+      .set('Authorization', `Bearer ${process.env.VALID_ACCESS_TOKEN}`)
+      .expect(403);
+  });
+
+  it('/secure/role-permission (GET) with roles and permissions', () => {
+    return request(app.getHttpServer())
+      .get('/secure/role-permission')
+      .set('Authorization', `Bearer ${process.env.VALID_ACCESS_TOKEN}`)
+      .expect(200)
+      .expect("I'm a secure endpoint via roles and permissions!");
+  });
+
+  it('/secure/role-permission-other (GET) with sufficient roles and insufficient permissions', () => {
+    return request(app.getHttpServer())
+      .get('/secure/role-permission-other')
+      .set('Authorization', `Bearer ${process.env.VALID_ACCESS_TOKEN}`)
+      .expect(403);
+  });
+
+  it('/secure/role-other-permission (GET) with insufficient roles and sufficient permissions', () => {
+    return request(app.getHttpServer())
+      .get('/secure/role-other-permission')
+      .set('Authorization', `Bearer ${process.env.VALID_ACCESS_TOKEN}`)
+      .expect(403);
+  });
+
+  it('/secure/role-other-permission-other (GET) with insufficient roles and insufficient permissions', () => {
+    return request(app.getHttpServer())
+      .get('/secure/role-other-permission-other')
+      .set('Authorization', `Bearer ${process.env.VALID_ACCESS_TOKEN}`)
+      .expect(403);
   });
 });
