@@ -369,3 +369,6 @@ e.g.
 npm version 1.2.17
 npm version patch // 1.2.17 -> 1.2.18
 ```
+
+## Additional information
+Based on: https://github.com/5-stones/nest-oidc
