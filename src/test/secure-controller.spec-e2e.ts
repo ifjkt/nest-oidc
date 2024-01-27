@@ -13,7 +13,11 @@ describe('AppController (e2e)', () => {
       imports: [
         ConfigModule.forRoot(),
         AuthModule.forRoot({
-          oidcAuthority: `${process.env.OIDC_AUTHORITY_URL}/realms/${process.env.OIDC_AUTHORITY_REALM}`,
+          oidcAuthority: [
+            `${process.env.OIDC_AUTHORITY_URL}/realms/${process.env.OIDC_AUTHORITY_REALM}`,
+            `${process.env.OIDC_AUTHORITY_URL}/realms/${process.env.OIDC_AUTHORITY_REALM_2}`,
+            `${process.env.OIDC_AUTHORITY_URL}/realms/${process.env.OIDC_AUTHORITY_REALM_3}`,
+          ],
           roles: () => ['ROLE_TESTER'],
           permissions: () => ['PERMISSION_A', 'PERMISSION_B', 'PERMISSION_C'],
           jwtMapper: (payload: any) => payload,

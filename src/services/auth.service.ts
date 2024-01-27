@@ -6,65 +6,90 @@ import { JwksClient } from 'jwks-rsa';
 
 import { JWT_MAPPER, OIDC_AUTHORITY, PERMISSIONS, ROLES } from '../consts';
 
-type SecretOrKeyProviderCallback = (error, secret: false | string) => void;
-type SecretOrKeyProvider = (request, rawJwtToken, done: SecretOrKeyProviderCallback) => void;
+type SecretOrKeyProviderCallback = (error: any, secret: false | string) => void;
+type SecretOrKeyProvider = (request: any, rawJwtToken: string, done: SecretOrKeyProviderCallback) => void;
 
-export interface JwksKey {
-  kid: string;
-  kty: string;
-  alg: string;
-  use: string;
-  n: string;
-  e: string;
-  x5c: string[];
-  x5t: string;
+interface OpenIDConfiguration {
+  issuer: string;
+  authorization_endpoint: string;
+  token_endpoint: string;
+  userinfo_endpoint?: string;
+  jwks_uri: string;
+  response_types_supported: string[];
+  subject_types_supported: string[];
+  id_token_signing_alg_values_supported: string[];
+  scopes_supported: string[];
+  token_endpoint_auth_methods_supported: string[];
 }
 
 @Injectable()
 export class AuthService {
-  private _oidcConfig: any | null = null;
-  private readonly jwksClient: Promise<JwksClient>;
+  private _oidcConfig: OpenIDConfiguration[] = [];
+  private readonly jwkClients: Promise<JwksClient[]>;
 
   constructor(
     @Inject(ROLES) protected readonly roles: (payload: any) => string[] | Promise<string[]>,
-    @Inject(OIDC_AUTHORITY) protected readonly oidcAuthority: string | Promise<string>,
+    @Inject(OIDC_AUTHORITY) protected readonly oidcAuthority: string[] | Promise<string[]>,
     @Inject(JWT_MAPPER) protected readonly jwtMapper: (payload: any) => any | Promise<any>,
     @Inject(PERMISSIONS) protected readonly permissions: (payload: any) => string[] | Promise<string[]>,
     protected readonly httpService: HttpService,
   ) {
-    this.jwksClient = this.getJwksClient();
+    this.jwkClients = this.getJwkClients();
   }
 
-  async getJwksClient(): Promise<JwksClient> {
-    const { jwks_uri } = await this.oidcConfig();
-    return new JwksClient({
-      jwksUri: jwks_uri,
-    });
+  async getJwkClients(): Promise<JwksClient[]> {
+    const configurations = await this.oidcConfig();
+    const jwkClients: JwksClient[] = [];
+    // Create jwk clients for each oidc configuration
+    for (const configuration of configurations) {
+      jwkClients.push(new JwksClient({ jwksUri: configuration.jwks_uri }));
+    }
+
+    return jwkClients;
   }
 
-  async oidcConfig(): Promise<any> {
-    if (this._oidcConfig) return this._oidcConfig;
+  async oidcConfig(): Promise<OpenIDConfiguration[]> {
+    // If we already have the JWK data, return
+    if (this._oidcConfig && this._oidcConfig.length > 0) return this._oidcConfig;
 
     try {
-      const oidcAuthority = await this.oidcAuthority;
-      const source$ = this.httpService.get(`${oidcAuthority}/.well-known/openid-configuration`);
-      const response = await lastValueFrom(source$);
-      this._oidcConfig = response.data;
+      const authorityUrls = await this.oidcAuthority;
+      // Collect JWK payload
+      for (const authorityUrl of authorityUrls) {
+        const source$ = this.httpService.get(`${authorityUrl}/.well-known/openid-configuration`);
+        const response = await lastValueFrom(source$);
+        this._oidcConfig.push(response.data);
+      }
+
       return this._oidcConfig;
     } catch (err) {
       throw new BadRequestException('There was an error when attempting to fetch openid-configuration', { cause: err });
     }
   }
 
-  async getPublicKey(rawJwtToken): Promise<string> {
+  async getPublicKey(rawJwtToken: string): Promise<string> {
     const result = jsonwebtoken.decode(rawJwtToken, { complete: true });
 
     if (result && typeof result !== 'string' && result.header) {
       const { header } = result;
       const kid = header.kid;
-      const client = await this.jwksClient;
-      const key = await client.getSigningKey(kid);
-      return key.getPublicKey();
+      for (const jwkClient of await this.jwkClients) {
+        try {
+          const key = await jwkClient.getSigningKey(kid);
+          if (!key) {
+            continue;
+          }
+
+          const pubKey = key.getPublicKey();
+          if (!pubKey) {
+            continue;
+          }
+
+          return pubKey;
+        } catch (err) {
+          // Ignore errors if key don't match with token
+        }
+      }
     }
 
     throw new Error('No header could be decoded from the JWT.');
