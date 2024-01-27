@@ -1,3 +1,13 @@
+# [10.2.0](https://github.com/ifjkt/nest-oidc/compare/v10.1.0...v10.2.0) (2024-01-27)
+
+
+### Features
+
+* **authority:** allow multiple JWK urls ([7598996](https://github.com/ifjkt/nest-oidc/commit/7598996b1109a546d6586bfbd1b9bc1c2d48ede9))
+* **jwk:** enable caching ([199559b](https://github.com/ifjkt/nest-oidc/commit/199559be1e311d746b5855cae92925bdad2dd32f))
+
+
+
 # [10.1.0](https://github.com/ifjkt/nest-oidc/compare/v10.0.3...v10.1.0) (2024-01-17)
 
 
