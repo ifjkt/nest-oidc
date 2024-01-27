@@ -42,7 +42,15 @@ export class AuthService {
     const jwkClients: JwksClient[] = [];
     // Create jwk clients for each oidc configuration
     for (const configuration of configurations) {
-      jwkClients.push(new JwksClient({ jwksUri: configuration.jwks_uri }));
+      jwkClients.push(
+        new JwksClient({
+          cache: true,
+          rateLimit: true,
+          cacheMaxEntries: 5,
+          jwksRequestsPerMinute: 10,
+          jwksUri: configuration.jwks_uri,
+        }),
+      );
     }
 
     return jwkClients;
