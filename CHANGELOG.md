@@ -1,3 +1,12 @@
+# [10.3.0](https://github.com/ifjkt/nest-oidc/compare/v10.2.0...v10.3.0) (2024-03-02)
+
+
+### Features
+
+* bump nest dependencies to 10.3.x ([3c72771](https://github.com/ifjkt/nest-oidc/commit/3c727716620a44a0d52ff5961ab927030a9c9240))
+
+
+
 # [10.2.0](https://github.com/ifjkt/nest-oidc/compare/v10.1.0...v10.2.0) (2024-01-27)
 
 
