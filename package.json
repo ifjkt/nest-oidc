@@ -1,6 +1,6 @@
 {
   "name": "@ifjkt/nest-oidc",
-  "version": "10.3.0",
+  "version": "10.4.0",
   "description": "An OIDC authentication module for NestJS APIs",
   "homepage": "https://github.com/ifjkt/nest-oidc#readme",
   "author": "Tamas Kiss <ifjkisstamas@outlook.com>",
